@@ -1,0 +1,1835 @@
+
+DEFINE FUNCTION Room_Cost_Function with PARAMETERS (Room_ID)
+{
+	DEFINE VARIABLE Price_Per_Day = 0
+
+	DEFINE switch structure with variable Room_ID
+	with case 101, 102, 103, 104, 105, 201, 202, 203, 204 and 205
+	IF Case 101 = true
+	{
+		Price_Per_Day = 180
+		BREAK switch structure
+	}
+	IF Case 102 = true
+	{
+		Price_Per_Day = 200
+		BREAK switch structure
+	}
+	IF Case 103 = true
+	{
+		Price_Per_Day = 250
+		BREAK switch structure
+	}
+	IF Case 104 = true
+	{
+		Price_Per_Day = 400
+		BREAK switch structure
+	}
+	IF Case 105 = true
+	{
+		Price_Per_Day = 500
+		BREAK switch structure
+	}
+	IF Case 201 = true
+	{
+		Price_Per_Day = 180
+		BREAK switch structure
+	}
+	IF Case 202 = true
+	{
+		Price_Per_Day = 200
+		BREAK switch structure
+	}
+	IF Case 203 = true
+	{
+		Price_Per_Day = 250
+		BREAK switch structure
+	}
+	IF Case 204 = true
+	{
+		Price_Per_Day = 400
+		BREAK switch structure
+	}
+	IF Case 205 = true
+	{
+		Price_Per_Day = 500
+		BREAK switch structure
+	}
+	IF no Cases = true
+	{
+		BREAK switch structure
+	}
+	RETURN Value of Price_Per_Day
+}
+
+DEFINE FUNCTION flushline with NO PARAMETERS;
+{
+	DEFINE variable ch
+	WHILE ch is NOT EQUAL to NEWLINE AND ch is NOT EQUAL to NULL
+	{
+		CLEAR input buffer
+	}
+	ENDWHILE
+	RETURN nothing
+}
+
+DEFINE FUNCTION RoomID_Duplicate_Checker with PARAMETERS(Room_ID)
+{
+	DEFINE variable Array_Count = 0, Room_ID_2, Iteration = 0
+	DEFINE ARRAY Delimeter[] = "; ", Booking_Detail_string[1001 CHARACTERS BYTES], Room_ID_Array[11 INTEGERS]
+	DEFINE variables Token5 and Next_Token5 which POINT to address of NULL
+	DEFINE variable Booking_File which POINTS to an address of a FILE
+	DEFINE variable err = Value of error code returned by function execution
+	
+	err = error code returned by OPENING of file "Booking_Details.txt" in READMODE where address of file is assigned to Booking_File variable
+	IF err = 0
+	{
+		DO NOTHING
+	}
+	else
+	{
+		PRINT ("Error Opening File")
+		EXIT PROGRAM wtih error code 1
+	}
+	ENDIF
+	WHILE string  READ from FILE variable Booking_File is NOT EQUAL to NULL
+	{
+		ASSIGN string to Booking_Detail_string
+		DEFINE variable Count = 0
+		DIVIDE Booking_Detail_string on OCCURANCE of characters in Delimeter ARRAY ONCE
+		ASSIGN resulting string to Token5 variable
+		ASSIGN address of remaining string to Next_Token5
+		INCREMENT Count by 1
+		WHILE Token5 AND Count < 5
+		{
+			DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+			ASSIGN resulting string to Token5 variable
+			ASSIGN address of remaining string to Next_Token5
+			INCREMENT Count by 1
+		}
+		ENDWHILE
+		Room_ID_2 = Conversion of Value of Token5 variable into INTEGER format
+		ADD Room_ID_2 to Room_ID_Array in POSITION equal to Value of variable Array_Count
+		INCREMENT Array_Count by 1
+	}
+	ENDWHILE
+	Iteration = 0
+	FOR Iteration < (SIZE of Room_ID_Array ARRAY / SIZE of FIRST OBJECT of Room_ID_Array ARRAY)
+	{
+		
+		IF Room_ID = Value of OBJECT in POSITION = Iteration in Room_ID_Array ARRAY
+		{
+			CLOSE FILE "Booking_Details.txt"
+			RETURN Value 0
+		}
+		ELSE
+		{
+			INCREMENT Iteration by 1
+			DO NOTHING
+		}
+		ENDIF
+	}
+	ENDFOR
+	CLOSE FILE "Booking_Details.txt"
+	RETURN Value 1
+}
+
+DEFINE FUNCTION Email_Checker with PARAMETERS (Dynamic_Email_Address ARRAY)
+{
+	DEFINE CONSTANT ARRAY Gmail = "gmail.com" + NEWLINE
+	DEFINE CONSTANT ARRAY Yahoo = "yahoo.com" + NEWLINE
+	DEFINE CONSTANT ARRAY Outlook = "outlook.com" + NEWLINE
+	DEFINE ARRAY Email_Domain_Checking[15 Character Bytes]
+	DEFINE varaible Character_Checking
+	DEFINE varaible Position_of_At
+	DEFINE varaible Step1, Step2 = 0, Step3
+	DEFINE variable Iteration = 0
+	Iteration = 0
+	FOR Iteration < 999
+	{
+		IF character at POSITION = Iteration in Dynamic_Email_Address ARRAY = '@'
+		{
+			Step1 = 1
+			Position_of_At = Iteration
+			BREAK FOR LOOP
+		}
+		ELSE
+		{
+			Step1 = 0
+			INCREMENT Iteration by 1
+		}
+		ENDIF
+	}
+	ENDFOR
+	IF Step1 = 1
+	{
+		Iteration = 0
+		FOR Iteration < Position_of_At
+		{
+			
+			Character_Checking = OBJECT at POSITION = Iteration in Dynamic_Email_Address
+			DEFINE switch structure with variable Character_Checking
+			with case '@','!','#','$','%','^','&','*','(',')',
+					  '-','_','=','+','{','}','[',']','|',' ',
+					  ';','?','.','>','<',',','/' and'"'
+			IF case '@' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '!' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '#' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '$' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '%' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '^' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '&' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '*' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '(' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case ')' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '-' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '_' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '=' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '+' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '[' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case ']' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '{' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '}' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case ';' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case ':' = true
+			{
+				RETURN Value 0 
+				BREAK switch statement
+			}
+			IF case '?' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '.' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '<' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '>' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case ',' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '"' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF case '/' = true
+			{
+				RETURN Value 0
+				BREAK switch statement
+			}
+			IF no cases = true
+			{
+				INCREMENT Iteration by 1
+				Step2 = 1;
+			}
+		}
+		IF Step2 = 1
+		{
+			ADD number of NULL Terminator characters = SIZE OF Email_Domain_Checking ARRAY to Email_Domain_Checking ARRAY
+			COPY string from Dynamic_Email_Address offset by Value = Position_of_At + 1 to Email_Domain_Checking ARRAY
+			Step3 = PORTION of Email_Domain_Checking string = to Gmail ARRAY
+			IF Step IS NOT EQUAL to Value 0
+			{
+				Step3 = PORTION of Email_Domain_Checking strong = to Yahoo ARRAY
+				IF Step IS NOT EQUAL to Value 0
+				{
+					Step3 = PORTION of Email_Domain_Checking strong = to Outlook ARRAY
+					IF Step IS NOT EQUAL to Value 0
+					{
+						RETURN Value 0
+					}
+					ELSE
+					{
+						RETURN Value 1
+					}
+					ENDIF
+				}
+				ELSE
+				{
+					RETURN Value 1
+				}
+				ENDIF
+			}
+			ELSE
+			{
+				RETURN Value 1
+			}
+			ENDIF
+		}
+		ELSE
+		{
+			RETURN Value 0
+		}
+		ENDIF
+		
+	}
+	ELSE
+	{
+		RETURN Value 0
+	}
+	ENDIF
+}
+
+DEFINE FUNCTION Username_Checker with PARAMETERS (Name ARRAY, Variable sizeofarray)
+{
+	DEFINE Step1 = NULL, Step2 = NULL
+	DEFINE variable Character_Checking
+	DEFINE variable  Iteration = 0
+	FOR Iteraton < sizeofarray
+	{
+		Character_Checking = OBJECT in Position = Iteration of Name ARRAY
+		DEFINE switch structure with variable Character_Checking
+		with case '@','!','#','$','%','^','&','*','(',')',
+				  '-','_','=','+','{','}','[',']','|',' ',
+				  ';','?','.','>','<',',','/' and'"'
+		IF case '@' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '!' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '#' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}IF case '$' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '%' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '^' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '&' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '*' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '(' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case ')' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '-' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '_' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '=' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '+' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '[' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case ']' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '{' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '}' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case ';' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case ':' = true
+		{
+			RETURN Value - 
+			BREAK switch statement
+		}
+		IF case '?' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '.' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '<' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '>' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case ',' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '"' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF case '/' = true
+		{
+			RETURN Value 0
+			BREAK switch statement
+		}
+		IF no cases = true
+		{
+			INCREMENT Iteration by 1
+			Step1 = 1;
+		}
+	}
+	IF Step1 = 1
+	{
+		Iteration = 0
+		FOR Iteration < sizeofarray
+		{
+			IF OBJECT in Name ARRAY at POSITION = Iteration is a DIGIT
+			{
+				Step2 = 0
+				RETURN Value 0
+				BREAK FOR LOOP
+			}
+			ELSE
+			{
+				INCREMENT Iteration by 1
+				Step2 = 1
+			}
+			ENDIF
+		}
+		ENDFOR
+		IF Step2 = 1
+		{
+			RETURN Value 1
+		}
+		ELSE
+		{
+			RETURN Value 0
+		}
+		ENDIF
+	}
+	ELSE
+	{
+		RETURN Value 0
+	}
+	ENDIF
+}
+
+DEFINE FUNCTION Update_Booking_Details with NO PARAMETERS
+{
+	WHILE TRUE
+	{
+		DEFINE variable STRUCTURE Booking_Info
+		{
+			Name[1001 Character Bytes] ARRAY
+			Email[101 Character Bytes] ARRAY
+			Contact_Number[51 Character Bytes] ARRAY
+			Days_of_Stay VARIABLE
+			Room_ID VARIABLE
+			Passport_number[51 Character Bytes] ARRAY
+		}
+		DEFINE STRUCTURE VARIABLE FOR Booking_Info Customer
+		DEFINE variable Booking_File3 and Output_File which point to an address of a FILE
+		DEFINE variable Room_ID_2
+		DEFINE variable Room_ID
+		DEFINE variable Return_to_Main_Menu = 0
+		DEFINE variable State = 0
+		DEFINE variable line_position = 0
+		DEFINE variable Line_Position2 = 0
+		DEFINE variable Iteration = 0
+		DEFINE Room_ID_Numbers[10 INTEGERS] ARRAY = {101,102,103,104,105,201,202,203,204,205}
+		DEFINE variable Room_Found = 0
+		DEFINE Token,Token2,Next_Token,Next_Token2 which POINT to the address of NULL
+		DEFINE Delimeter ARRAY = ": "
+		DEFINE Booking_Detail_string[1001 Character Bytes]
+		DEFINE Booking_Detail_string2[1001 Character Bytes]
+		DEFINE Temp[] ARRAY = "Temp.txt"
+		DEFINE Booking_Detail_string3[1001 Character Bytes]
+		DEFINE Modified_Line[1001 Character Bytes]
+		PRINT("--------------------------------------------------");
+		PRINT("Please enter a ROOM ID to updates its booking details:-");
+		PRINT("Or enter '3' to return to the main menu:- ");
+		READ entered Value into Room_ID variable
+		CALL FUNCTION flushline()
+		DEFINE switch structure with variable Room_ID
+		with case 3
+		IF case 3 = true
+		{
+			Return_to_Main_Menu = 1
+			BREAK switch structure
+		}
+		IF no cases = true
+		{
+			DO NOTHING
+		}
+		IF Return_to_Main_Menu = 1
+		{
+			BREAK WHILE LOOP
+		}
+		
+		DEFINE variable err = Value of error code returned by execution of FUNCTION
+		err = error code returned by OPENING of file "Booking_Details.txt" in READMODE where address of file is assigned to Booking_File3 variable
+		IF err = 0
+		{
+			DO NOTHING
+		}
+		ELSE
+		{
+			PRINT("\nError opening file\n");
+			PRINT WITH ERROR VALUE("Error Message:- 'err'");
+			EXIT PROGRAM with Value 1
+		}
+		ENDIF
+		err = error code returned by OPENING of file "Temp.txt" in WRITE+MODE where address of file is assigned to Output_File variable
+		IF err = 0
+		{
+			DO NOTHING
+		}
+		ELSE
+		{
+			PRINT("\nError opening file\n");
+			PRINT WITH ERROR VALUE("Error Message:- 'err'");
+			EXIT PROGRAM with Value 1
+		}
+		ENDIF
+	/*Checking if file is empty, then resetting pointer position*/
+
+		PLACE CURSOR AT THE END OF FILE of Booking_File3
+		RETURN size of FILE of Booking_File3
+		IF SIZE OF FILE of Booking_File3 = 0
+		{
+			PRINT("---------------------------------------")
+			PRINT("No bookings have been made as of yet!")
+			PRINT("-------------------------------------")
+			IF FILE of Booking_File3 is OPEN
+			{
+				err = error code Value returned by CLOSING of FILE of Booking_File3
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Booking_File3)")
+				}
+				ENDIF
+			}
+			IF FILE of Output_File is OPEN
+			{
+				err = CLOSING of FILE of Output_File
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Output_File)")
+				}
+				ENDIF
+			}
+			BREAK WHILE LOOP
+		}
+		ELSE
+		{
+			PLACE CURSOR AT START of FILE of Booking_File3
+		}
+		ENDIF
+		WHILE string READ from FILE variable Booking_File3 is NOT EQUAL to NULL
+		{
+			ASSIGN string to Booking_Detail_string ARRAY
+			DEFINE variable Count = 0
+			DEFINE variable While_State2 = 0
+			INCREMENT line_position by 1
+			COPY string from Booking_Detail_string ARRAY to Booking_Detail_string2 ARRAY
+			DIVIDE Booking_Detail_string on OCCURANCE of characters in Delimeter ARRAY ONCE
+			ASSIGN resulting string to Token variable
+			ASSIGN address of remaining string to Next_Token variable
+			INCREMENT Count by 1
+			WHILE Token and Count < 5
+			{
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token variable
+				ASSIGN address of remaining string to Next_Token variable
+				INCREMENT Count by 1
+			}
+			ENDWHILE
+			ROOM_ID_2 = Value of Token variable CONVERTED to INTEGER FORMAT
+			IF Room_ID = Room_ID_2
+			{
+				DIVIDE Booking_Detail_string2 on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Name ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Email ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Passport_number ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Contact_Number ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				Customer.Days_of_Stay = Value of Token2 variable CONVERTED to INTEGER FORMAT
+				WHILE TRUE
+				{
+					DEFINE variable While_State1 = 0
+					DEFINE variable Answer = 0
+					PRINT("-------------------------------------");
+					PRINT("||1. Email\n")
+					PRINT("||2. Contact Number\n")
+					PRINT("||3. Days of Stay\n")
+					PRINT("||4. Room ID\n")
+					PRINT("||5. Return to the previous menu\n")
+					PRINT("||-----------------------------------")
+					PRINT("Which detail do you wish to modify?:- ")
+					READ inputted data INTO Answer variable
+					CALL FUNCTION flushline
+					DEFINE switch sturcture with variable Answer
+					with case 1,2,3,4 and 5
+					IF case 1 = TRUE
+						{
+							WHILE TRUE
+							{
+								DEFINE variable state = 0
+								DEFINE variable Dynamic_Email_Address which POINTS to the address of NULL
+								Dynamic_Email_Address = (20 * (SIZE OF Customer.Email)) BYTES allocated
+								IF Dynamic_Email_Address = NULL
+								{
+									PRINT("Unable to allocated required memory")
+								}
+								ELSE
+								{
+									PRINT("-------------------------------------");
+									PRINT("Please enter your new email address:- ");
+									READ inputted data into Dynamic_Email_Address ARRAY
+								}
+								ENDIF
+								state = RETURNED VALUE from CALLING of FUNCTION Email_Checker with PARAMETER(Dynamic_Email_Address);
+								IF state = 1
+								{
+									COPY string from Dynamic_Email_Address ARRAY to Customer.Email ARRAY
+									REMOVE NEWLINE from Customer.Email
+									Modified_Line = Customer.Name ":" Customer.Email ":" Customer.Passport_number ":" Customer.Contact_Number ":" Customer.Room_ID ":" Customer.Days_of_Stay + NEWLINE
+									While_State1 = 1
+									While_State2 = 1
+									PRINT("-----------------")
+									PRINT("Update successful!")
+									PRINT("------------------")
+									BREAK WHILE LOOP
+								}
+								ELSE
+								{
+									PRINT("---------------------------------------")
+									PRINT("Incorrect email format, please try again.")
+									PRINT("-----------------------------------------")
+								}
+								ENDIF
+							}
+							ENDWHILE
+							State = 1
+							BREAK switch structure
+						}
+					IF case 2 = TRUE:
+						{
+							WHILE TRUE
+							{
+								DEFINE variable state = 0
+								PRINT("--------------------------------------------------")
+								PRINT("Please enter your new contact number (only digits):- ")
+								READ inputted data into Customer.Contact_Number ARRAY
+								REMOVE NEWLINE from Customer.Contact_Number ARRAY
+								Iteration = 0
+								FOR OBJECT at POSITION = Iteration in Customer.Contact_Number NOT EQUAL TO '\0'
+								{
+									IF OBJECT at POSITION = Iteration in Customer.Contact_Number NOT a DIGIT
+									{
+										PRINT("---------------------------------------------------------")
+										PRINT("Invalid phone number, please try again with only numbers.")
+										PRINT("---------------------------------------------------------")
+										state = 0;
+										BREAK FOR LOOP
+									}
+									ELSE
+									{
+										state = 1
+									}
+									ENDIF
+									INCREMENT Iteration by 1
+								}
+								ENDFOR
+
+								IF state = 0
+								{
+									DO NOTHING
+								}
+								ELSE
+								{
+									IF LENGTH of Customer.Contact_Number ARRAY is GREATER than 20 digits OR LESS than 10 Digits
+									{
+										PRINT("-----------------------------------------------------")
+										PRINT("Contact Number is not of sufficient size, please enter ")
+										PRINT("a number less than 20 digits And greater than 10 digits")
+										PRINT("-------------------------------------------------------")
+									}
+									ELSE
+									{									
+										REMOVE NEWLINE in Customer.Contact ARRAY
+										Modified_Line = Customer.Name ":" Customer.Email ":" Customer.Passport_number ":" Customer.Contact_Number ":" Customer.Room_ID ":" Customer.Days_of_Stay + NEWLINE
+										While_State1 = 1;
+										While_State2 = 1;
+										PRINT("-----------------")
+										PRINT("Update successful!")
+										PRINT("------------------")
+										BREAK WHILE LOOP									
+									}
+									ENDIF
+								}
+								ENDIF
+							}
+							ENDWHILE
+							State = 1;
+							BREAK switch statement
+						}
+					IF case 3 = TRUE:
+						{
+							WHILE TRUE
+							{
+								PRINT("-------------------------------------------------")
+								PRINT("How many days would you like to rebook your stay?")
+								PRINT("You can only book a room for up to 1 to 7 days.:- ")
+								READ inputted data into Customer.Days_of_Stay variable
+								CALL FUNCTION flushline()
+								IF Value of Customer.Days_of_Stay LESS than 8 AND GREATER than 0
+								{
+									Modified_Line = Customer.Name ":" Customer.Email ":" Customer.Passport_number ":" Customer.Contact_Number ":" Customer.Room_ID ":" Customer.Days_of_Stay + NEWLINE
+									While_State1 = 1;
+									While_State2 = 1;
+									PRINT("-----------------")
+									PRINT("Update successful!")
+									PRINT("------------------")
+									BREAK WHILE LOOP
+								}
+								ELSE
+								{
+									PRINT("-----------------------------------------------------")
+									PRINT("You have entered an invalid answer, please try again.")
+									PRINT("-----------------------------------------------------")
+								}
+								ENDIF
+							}
+							ENDWHILE
+							State = 1;
+							BREAK switch statement;
+						}
+					IF case 4 = TRUE:
+						{
+							DEFINE variable state = 0
+							DEFINE variable Room_ID = 0
+							WHILE TRUE
+							{
+								PRINT("-------------------------------------------------")
+								PRINT("Which room would you like to rebook to?:- ")
+								READ inputted data into Customer.Room_ID variable
+								CALL FUNCTION flushline()
+								Iteration = 0
+								FOR Iteration < 10
+								{
+									IF Room_ID = OBJECT at POSITION = ITERATION in Room_ID_Numbers ARRAY
+									{
+										Room_Found = 1
+										BREAK FOR LOOP
+									}
+									ELSE
+									{
+										INCREMENT Iteration by 1
+										Room_Found = 0
+									}
+									ENDIF
+								}
+								ENDFOR
+								IF Room_Found = 1
+								{
+									state = Value RETURNED by CALLING of FUNCTION RoomID_Duplicate_Checker with PARAMETERS(Room_ID)
+									IF state = 1
+									{
+										Modified_Line = Customer.Name ":" Customer.Email ":" Customer.Passport_number ":" Customer.Contact_Number ":" Customer.Room_ID ":" Customer.Days_of_Stay + NEWLINE
+										While_State1 = 1;
+										While_State2 = 1;
+										PRINT("-----------------")
+										PRINT("Update successful!")
+										PRINT("------------------")
+										BREAK WHILE LOOP
+									}
+									ELSE
+									{
+										PRINT("--------------------------------------------------------------------")
+										PRINT("This room has already been booked!, please type in another room's ID")
+										PRINT("--------------------------------------------------------------------")
+									}
+									ENDIF
+								}
+								ELSE
+								{
+									PRINT("\n-------------------------------------------------")
+									PRINT("Room ID not found, please type in the correct ID.")
+									PRINT("-------------------------------------------------")
+								}
+								ENDIF
+							}
+							ENDWIHLE
+							State = 1
+							BREAK switch statement
+						}
+					IF case 5 = TRUE
+						{
+							While_State1 = 1
+							While_State2 = 1
+							BREAK switch statement
+						}
+					IF no cases = TRUE
+						{
+							PRINT("------------------------------------------------------")
+							PRINT("You have entered an incorrect Value, please try again.")
+							PRINT("------------------------------------------------------")
+							BREAK switch satement
+						}
+					IF While_State1 = 1
+					{
+						BREAK WHILE  LOOP
+					}						
+				}
+				ENDWHILE
+			}
+			ELSE
+			{
+				State = 0
+			}
+			ENDIF
+			IF While_State2 = 1
+			{
+				BREAK WHILE LOOP
+			}
+		}
+		ENDWHILE
+		IF State = 0
+		{
+			PRINT("----------------------------------")
+			PRINT("This room has not been booked yet!")
+			PRINT("----------------------------------")
+			IF FILE of Booking_File3 is OPEN
+			{
+				err = error code Value returned by CLOSING of FILE of Booking_File3
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Booking_File3)")
+				}
+				ENDIF
+			}
+			IF FILE of Output_File is OPEN
+			{
+				err = error code Value returned by CLOSING of FILE of Output_File
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Output_File)")
+				}
+				ENDIF
+			}
+			
+		}
+		ELSE
+		{
+			PLACE CURSOR at START of FILE of Booking_File3
+			WHILE string READ from FILE variable Booking_File3 is NOT EQUAL to NULL
+			{
+				ASSIGN string to Booking_Detail_string3 ARRAY
+				INCREMENT Line_Position2 by 1
+				IF Line_Position2 IS NOT EQUAL to line_position
+				{
+					PRINT Booking_Detail_string3 ARRAY to FILE of Output_File
+				}
+				ELSE
+				{
+					PRINT Modified_Line ARRAY to FILE of Output_File
+				}
+				ENDIF
+			}
+			ENDWHILE
+			IF FILE of Booking_File3 is OPEN
+			{
+				err = error code Value returned by CLOSING of FILE of Booking_File3
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Booking_File3)")
+				}
+				ENDIF
+			}
+			IF FILE of Output_File is OPEN
+			{
+				err = error code Value returned by CLOSING of FILE of Output_File
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Output_File)")
+				}
+				ENDIF
+			}
+			err = error code Value returned by REMOVING "Booking_Details.txt"
+			IF err = 0
+			{
+				DO NOTHING
+			}
+			ELSE
+			{
+				PRINT("Error removing file")
+				PRINT ERROR MESSAGE("Error Message:-" + meaning of err);
+				EXIT PROGRAM with Value 1
+			}
+			ENDIF
+			err = RENAME "Temp.txt" to "Booking_Details.txt"
+			IF err = 0
+			{
+				DO NOTHING
+			}
+			ELSE
+			{
+				PRINT("Error renaming file")
+				perror("Error Message:-")
+				EXIT PROGRAM with Value 1
+			}
+			ENDIF
+
+			BREAK WHILE LOOP
+		}
+		ENDIF
+	}
+	ENDWHILE
+}	
+
+DEFINE FUNCTION Search_Booking_Details with NO PARAMETERS
+{
+	WHILE TRUE
+	{
+		DEFINE variable STRUCTURE Booking_Info
+		{
+			Name[1001 Character Bytes] ARRAY
+			Email[101 Character Bytes] ARRAY
+			Contact_Number[51 Character Bytes] ARRAY
+			Days_of_Stay VARIABLE
+			Room_ID VARIABLE
+			Passport_number[51 Character Bytes] ARRAY
+		}
+		DEFINE STRUCTURE VARIABLE FOR Booking_Info Customer
+		DEFINE FILE variable Booking_File2
+		DEFINE variable Room_ID_2
+		DEFINE variable Room_ID
+		DEFINE variable Return_to_Main_Menu = 0
+		DEFINE variable State = 0
+		DEFINE variable Token,Token2,Next_Token,Next_Token2 which POINT to the address of NULL
+		DEFINE Delimeter[] ARRAY = ": "
+		DEFINE Booking_Detail_string[1001 Character Bytes]
+		DEFINE Booking_Detail_string2[1001 Character Bytes]
+		PRINT("--------------------------------------------------")
+		PRINT("Please enter a ROOM ID to view its booking details:-")
+		PRINT("Or enter '3' to return to the main menu:- ")
+		READ inputted data into Room_ID
+		CALL FUNCTION flushline()
+		DEFINE switch structure with Room_ID
+		with case 3
+		IF case 3 = TRUE
+		{
+			Return_to_Main_Menu = 1
+			BREAK switch structure
+		}
+		IF no cases = TRUE
+		{
+			DO NOTHING
+		}
+		IF Return_to_Main_Menu = 1
+		{
+			BREAK WHILE LOOP
+		}
+		DEFINE variable err = Value of error codes returned by FUNCTIONS
+		err = OPENING of "Booking_Details.txt" in READMODE and its ADDRESS assigned to Booking_File2 variable
+		IF err = 0
+		{
+			DO NOTHING
+		}
+		ELSE
+		{
+			PRINT("Error opening file")
+			perror("Error Message:-")
+			EXIT PROGRAM with Value 1
+		}
+		ENDIF
+		PLACE CURSOR at END OF FILE of Booking_File2
+		IF SIZE OF FILE of Booking_File2 = 0 BYTES
+		{	
+			PRINT("---------------------------------------");
+			PRINT("No bookings have been made as of yet!")
+			PRINT("-------------------------------------")
+			BREAK WHILE LOOP
+		}
+		ELSE
+		{
+			PLACE CURSOR at START OF FILE of Booking_File2
+		}
+		ENDIF
+		WHILE string READ from FILE variable Booking_File2 is NOT EQUAL to NULL
+		{
+			ASSIGN string to Booking_Detail_string
+			COPY string from Booking_Detail_string to Booking_Detail_string2
+			DEFINE variable Count = 0
+			DIVIDE Booking_Detail_string on first occuranec of characters in Delimeter ARRAY
+			ASSIGN resulting string to Token
+			ASSIGN address of remaining string to Next_Token
+			INCREMENT Count by 1
+			WHILE Token and Count < 5
+			{
+				DIVIDE remaining string on first occurance of characters in Delimeter ARRAY
+				ASSIGN resulting string to Token
+				ASSIGN address of remaining string to Next_Token
+				INCREMENT Count by 1
+			}
+			ENDWHILE
+			Room_ID_2 = Value of Token CONVERTED to INTEGER FORMAT
+c			IF Room_ID = Room_ID_2
+			{
+				DIVIDE Booking_Detail_string2 on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Name ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Email ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Passport_number ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				COPY string in Token2 to Customer.Contact_Number ARRAY
+				
+				DIVIDE remaining string on OCCURANCE of characters in Delimeter ARRAY ONCE
+				ASSIGN resulting string to Token2 variable
+				ASSIGN address of remaining string to Next_Token2 variable
+				Customer.Days_of_Stay = Value of Token2 variable CONVERTED to INTEGER FORMAT
+				PRINT("------------------------------------------------------")
+				PRINT("||Room ID Number:- ", Customer.Room_ID)
+				PRINT("||Name:-           ", Customer.Name)
+				PRINT("||Email:-          ", Customer.Email)
+				PRINT("||Passport Number:-", Customer.Passport_number)
+				PRINT("||Contact Number:- ", Customer.Contact_Number)
+				PRINT("||Days of Stay:-   ", Customer.Days_of_Stay)
+				PRINT("------------------------------------------------------")
+				State = 1;
+				BREAK WHILELOOP
+			}
+			ELSE
+			{
+				State = 0
+			}
+			ENDIF
+		}
+		ENDWHILE
+		IF State = 0
+		{
+		PRINT("----------------------------------")
+		PRINT("This room has not been booked yet!")
+		PRINT("----------------------------------")
+		}
+		IF FILE of Booking_File2 is OPEN
+		{
+			err = error code Value returned by CLOSING of FILE of Booking_File2
+			IF err = 0
+			{
+				DO NOTHING
+			}
+			ELSE
+			{
+				PRINT("Error closing file")
+			}
+			ENDIF
+		}
+	}
+	ENDWHILE
+}
+
+DEFINE FUNCTION Booking_Function with NO PARAMETERS
+{
+	DEFINE variable STRUCTURE Booking_Info
+	{
+		Name[1001 Character Bytes] ARRAY
+		Email[101 Character Bytes] ARRAY
+		Contact_Number[51 Character Bytes] ARRAY
+		Days_of_Stay VARIABLE
+		Room_ID VARIABLE
+		Passport_number[51 Character Bytes] ARRAY
+	}
+	DEFINE STRUCTURE VARIABLE FOR Booking_Info Customer
+	DEFINE variable Booking_File3 and Output_File which point to an address of a FILE
+	DEFINE variable Return_to_Main_Menu = 0
+	DEFINE variable State
+	DEFINE variable Iteration
+	DEFINE Room_ID_Numbers[10 INTEGERS] ARRAY = {101,102,103,104,105,201,202,203,204,205}
+	DEFINE variable Room_Found = 0
+	WHILE TRUE
+	{
+		PRINT("--------------------------------------------------------")
+		PRINT("   Welcome to Ali's Hotel Online Room Booking System")
+		PRINT("--------------------------------------------------------")
+		PRINT("|   Room ID    |    Room Type    |    Price Per Day    |")
+		PRINT("|     101      |    Superior     |       RM180         |")
+		PRINT("|     102      |     Deluxe      |       RM180         |")
+		PRINT("|     103      |     Studio      |       RM180         |")
+		PRINT("|     104      | Executive Suite |       RM180         |")
+		PRINT("|     105      |  Deluxe Suite   |       RM180         |")
+		PRINT("|     201      |    Superior     |       RM180         |")
+		PRINT("|     202      |     Deluxe      |       RM180         |")
+		PRINT("|     203      |     Studio      |       RM180         |")
+		PRINT("|     204      | Executive Suite |       RM180         |")
+		PRINT("|     205      |  Deluxe Suite   |       RM180         |")
+		PRINT("--------------------------------------------------------")
+		WHILE TRUE
+		{
+			DEFINE variable State
+			PRINT("----------------------------------------------------------------------------")
+			PRINT("Which room would you like to book? Please enter the Room's ID from the list.")
+			PRINT("----------------------------------------------------------------------------")
+			PRINT("Or Enter '3' to return to the main menu:- ")
+			READ entered data INTO Customer.Room_ID
+			CALL FUNCTION flushline()
+			DEFINE switch structure with variable Customer.Room_ID
+			with case 3
+			IF case 3 = TRUE
+			{
+				Return_to_Main_Menu = 1
+				BREAK switch statement
+			}
+			IF no cases = TRUE
+			{
+				DO NOTHING
+				BREAK switch statement
+			}
+			IF Customer.Room_ID = 3
+			{
+				BREAK WHILE LOOP
+			}
+			FOR Iteration < 10
+			{
+				IF Customer.Room_ID = OBJECT at POSITION = Iteration in Room_ID_Numbers ARRAY
+				{
+					Room_Found = 1
+					BREAK FOR LOOP
+				}
+				ELSE
+				{
+					INCREMENT Iteration by 1
+					Room_Found = 0
+				}
+				ENDIF
+			}
+			ENDFOR
+			IF Room_Found = 1
+			{
+				State = RETURNED Value from CALLING OF FUNCTIOn RoomID_Duplicate_Checker with PARAMETERS(Customer.Room_ID)
+				If State = 1
+				{
+					BREAK WHILE LOOP
+				}
+				ELSE
+				{
+					PRINT("--------------------------------------------------------------------")
+					PRINT("This room has already been booked!, please type in another room's ID")
+					PRINT("--------------------------------------------------------------------")
+				}
+				ENDIF
+			}
+			ELSE
+			{
+				PRINT("-------------------------------------------------------------------")
+				PRINT("Room ID not found, please type in the correct ID given in the list.")
+				PRINT("-------------------------------------------------------------------")
+			}
+			ENDIF
+		}
+		ENDWHILE
+		IF Return_to_Main_Menu = 1
+		{
+			BREAK WHILE LOOP
+		}
+		WHILE TRUE
+		{
+			DEFINE variable Character_Checker
+			DEFINE variable sizeofarray = 0
+			PRINT("---------------------------------------------------------------------")
+			PRINT("Please enter your Name (Only certain special characters are allowed):- ")
+			READ inputted data into Customer.Name ARRAY
+			REMOVE newline from Customer.Name ARRAY
+			Iteration = 0
+			FOR OBJECT at POSITION = Iteration in Customer.Name ARRAY NOT EQUAL TO '\0'
+			{
+				Character_Checker = OBJECT at POSITION = Iteration in Customer.Name ARRAY
+				INCREMENT sizeofarray by 1
+				INCREMENT Iteration by 1
+			}
+			ENDFOR
+			State = VALUE RETURNED by CALLING OF FUNCTION Username_Checker with PARAMETERS(Customer.Name ARRAY, sizeofarray VARIABLE)
+			IF State = 1
+			{
+				BREAK WHILE LOOP
+			}
+			ELSE
+			{
+				PRINT("----------------------------------------")
+				PRINT("Incorrect Name format, please try again.")
+				PRINT("----------------------------------------")
+			}
+			ENDIF
+		}
+		ENDWHILE
+		WHILE TRUE
+		{
+			DEFINE variable state
+			DEFINE variable Dynamic_Email_Address which POINTS to ADDRESS of NULL
+			Dynamic_Email_Address = (20* SIZE OF Customer.Email ARRAY) BYTES
+			IF Dynamic_Email_Address = NULL
+			{
+				PRINT("Unable to allocated required memory")
+			}
+			ELSE
+			{
+				PRINT("----------------------------------")
+				PRINT("Please enter your email address:- ")
+				READ Inputted data into Dynamic_Email_Address ARRAY
+			}
+			ENDIF
+			state = VALUE RETURNED BY CALLING OF FUNCTION Email_Checker with PARAMETERS (Dynamic_Email_Address ARRAY)
+			IF state = 1
+			{
+				COPY string in Dynamic_Email_Address ARRAY into Customer.Email ARRAY
+				REMOVE NEWLINE from Customer.Email ARRAY
+				BREAK WHILE LOOP
+			}
+			ELSE
+			{
+				PRINT("---------------------------------------")
+				PRINT("Incorrect email format, please try again.")
+				PRINT("-----------------------------------------")
+			}
+			ENDIF
+		}
+		ENDWHILE
+		WHILE TRUE
+		{
+			State = 0
+			PRINT("-----------------------------------------------")
+			PRINT("Please enter your contact number (only digits):- ")
+			READ entered data INTO Customer.Contact_Number ARRAY
+			Iteration = 0
+			FOR OBJECT at POSITION = ITERATION in Customer.Contact_Number ARRAY NOT EQUAL TO '\0'
+			{
+				IF OBJECT at POSITION = ITERATION in Customer.Contact_Number ARRAY IS NOT a DIGIT
+				{
+					PRINT("---------------------------------------------------------")
+					PRINT("Invalid phone number, please try again with only numbers.")
+					PRINT("---------------------------------------------------------")
+					State = 0
+					BREAK FOR LOOP
+				}
+				ELSE
+				{
+					State = 1
+					INCREMENT Iteration by 1
+				}
+				ENDIF
+			}
+			ENDFOR
+			IF State = 0
+			{
+				DO NOTHING
+			}
+			ELSE
+			{
+				IF string in Customer.Contact_Number is GREATER THAN 20 OR LESS THAN 10
+				{
+					PRINT("-----------------------------------------------------")
+					PRINT("Contact Number is not of sufficient size, please enter ")
+					PRINT("a number less than 20 digits And greater than 10 digits")
+					PRINT("-------------------------------------------------------")
+				}
+				ELSE
+				{
+					REMOVE NEWLINE from Customer.Contact_Number ARRAY
+					BREAK WHILE LOOP
+				}
+				ENDIF
+			}
+			ENDIF
+		}
+		ENDWHILE
+		WHILE TRUE
+		{
+			PRINT("----------------------------------")
+			PRINT("Please enter your passport number:- ")
+			READ entered data into Customer.Passport_number ARRAY
+			REMOVE NEWLINE from Customer.Passport_number ARRAY
+			Iteration = 0
+			FOR Iteration < 51
+			{
+				IF OBJECT at POSITION = Iteration in Customer.Passport_number ARRAY is not an AlphaNumberic character
+				{
+					PRINT("-----------------------------------------------------------------------")
+					PRINT("Passport number contains a non alphanumeric character, please try again")
+					PRINT("-----------------------------------------------------------------------")
+					State = 0
+					BREAK FORLOOP
+				}
+				ELSE
+				{
+					State = 1
+					INCREMENT Iteration by 1
+				}
+				ENDIF
+			}
+			IF State = 0
+			{
+				DO NOTHING
+			}
+			ELSE
+			{
+				IF string in Customer.Passport_number ARRAY is GREATER THAN 13 or LESS than 8 characters
+				{
+					PRINT("-----------------------------------------------------------------------")
+					PRINT("Passport number is of insufficient size, please enter a passport number")
+					PRINT("greater than 8 digits/characters and less than 14 digits/characters.   ")
+					PRINT("-----------------------------------------------------------------------")
+				}
+				else
+				{
+					IF State = 1
+					{
+						BREAK WHILE LOOP
+					}
+					ELSE
+					{
+						DO NOTHING
+					}
+					ENDIF
+				}
+				ENDIF
+			}
+			ENDIF
+		}
+		ENDWHILE
+		WHILE TRUE
+		{
+			PRINT("-----------------------------------------------")
+			PRINT("How many days would you like to book your stay?")
+			PRINT("You can only book a room for up to 7 days.:- ")
+			READ entered data into Customer.Days_of_Stay variable
+			CALL FUNCTION flushline()
+			IF Customer.Days_of_Stay is LESS THAN 8 OR GREATER than 0
+			{
+				BREAK WHILE LOOP
+			}
+			ELSE
+			{
+				PRINT("-----------------------------------------------------")
+				PRINT("You have entered an invalid answer, please try again.")
+				PRINT("-----------------------------------------------------")
+			}
+			ENDIF
+		}
+		ENDWHILE
+		DEFINE err = error Value returned by executed FUNCTIONS
+		err = error code Value RETURNED by OPENING of "Booking_Details.txt" in APPENDMODE where the address of the file is assigned to Booking_File variable
+		IF err = 0
+		{
+			DO NOTHING
+		}
+		ELSE
+		{
+			PRINT("Error opening file")
+			PRINT ERROR MESSSGE("Error Message:- " + err)
+			EXIT PROGRAM with Value 1
+		}
+		ENDIF
+		PRINT (Customer.Name ":" Customer.Email ":" Customer.Passport_number ":" Customer.Contact_Number ":" Customer.Room_ID ":" Customer.Days_of_Stay + NEWLINE)
+				to FILE of Booking_File variable
+		PRINT("-------------------")
+		PRINT("Booking successful!")
+		PRINT("-------------------")
+		IF FILE of Booking_File is OPEN
+		{
+			err = error Value returned by CLOSING of FILE of Booking_File variable
+			IF err = 0
+			{
+				DO NOTHING
+			}
+			ELSE
+			{
+				PRINT("------------------")
+				PRINT("Error closing file")
+				PRINT("------------------")
+			}
+			ENDIF
+		}
+		BREAK WHILE LOOP
+	}
+	ENDWHILE
+}
+	
+DEFINE FUNCTION Cost_Function with NO PARAMETERS
+{
+	DEFINE variable STRUCTURE Booking_Info
+	{
+		Name[1001 Character Bytes] ARRAY
+		Email[101 Character Bytes] ARRAY
+		Contact_Number[51 Character Bytes] ARRAY
+		Days_of_Stay VARIABLE
+		Room_ID VARIABLE
+		Passport_number[51 Character Bytes] ARRAY
+	}
+	DEFINE STRUCTURE VARIABLE FOR Booking_Info Customer
+	DEFINE variable Booking_File4 and Room_Costs which point to an address of a FILE
+	DEFINE variable Room_ID_2
+	DEFINE variable Room_ID
+	DEFINE variable Return_to_Main_Menu = 0
+	DEFINE variable State = 0
+	DEFINE variable line_position = 0
+	DEFINE variable Line_Position2 = 0
+	DEFINE variable Iteration = 0
+	DEFINE Room_ID_Numbers[10 INTEGERS] ARRAY = {101,102,103,104,105,201,202,203,204,205}
+	DEFINE variable Room_Found = 0
+	DEFINE Token,Token2,Token3,Token4,Next_Token,Next_Token2,Next_Token3,Next_Token4 which POINT to the address of NULL
+	DEFINE Delimeter ARRAY = ": "
+	DEFINE Booking_Detail_string[1001 Character Bytes]
+	DEFINE Booking_Detail_string2[1001 Character Bytes]
+	DEFINE Temp[] ARRAY = "Temp.txt"
+	DEFINE Booking_Detail_string3[1001 Character Bytes]
+	DEFINE Room_Costs_string[1001 Character Bytes]
+	DEFINE variable Price_Per_Day
+	DEFINE variable Total_Priec
+	DEFINE err = Value of error codes returned by excution of FUNCTIONS
+	err = OPENING of FILE "Booking_Details.txt" in READMODE where the ADDRESS of the FILE is assigned to Booking_File4 variable
+	IF err = 0
+	{
+		DO NOTHING
+	}
+	ELSE
+	{
+		PRINT("Error opening file")
+		PRINT ERROR MESSAGE("Error Message:-" + err)
+		EXIT PROGRAM with Value 1
+	}
+	ENDIF
+	err = OPENING of FILE "Room_Costs.txt" in READMODE+ where the ADDRESS of the FILE is assigned to Room_Costs variable
+	IF err = 0
+	{
+		DO NOTHING
+	}
+	ELSE
+	{
+		PRINT("Error opening file")
+		PRINT ERROR MESSAGE("Error Message:-" + err)
+		EXIT PROGRAM with Value 1
+	}
+	ENDIF
+	PLACE CURSOR at the START of FILE of Booking_File4
+	WHILE string READ from FILE variable Booking_File4 is NOT EQUAL to NULL
+	{
+		DEFINE variable Count = 0, Count2 = 0
+		DIVIDE Booking_Detail_string on OCCURANCE of characters present in Delimeter ARRAY ONCE
+		ASSIGN resulting string to Token variable
+		ASSIGN remaining string to Next_Token variable
+		INCREMENT Count by 1
+		WHILE Token and Count < 5
+		{
+			DIVIDE resulting string on OCCURANEC of characters present in Delimeter ARRAY ONCE
+			ASSIGN resulting string to Token variable
+			ASSIGN remaining string to Next_Token variable
+			INCREMENT Count by 1
+		}
+		ENDWHILE
+		Customer.Room_ID = Value of Token variable CONVERTED to INTEGER FORMAT
+		DIVIDE resulting string on OCCURANEC of characters present in Delimeter ARRAY ONCE
+		ASSIGN resulting string to Token variable
+		ASSIGN remaining string to Next_Token variable
+		INCREMENT Count by 1
+		
+		Customer.Days_of_Stay = Value of Token variable CONVERTED to INTEGER FORMAT
+		Price_Per_Day = Value RETURNED BY CALLING of FUNCTION Room_Cost_Function with PARAMETERS(Customer.Room_ID)
+		Total_Price = ((Price_Per_Day * Customer.Days_of_Stay) + (0.1 * (Price_Per_Day * Customer.Days_of_Stay)) + (10 * Customer.Days_of_Stay))
+		
+		PRINT (Customer.Name ":" Customer.Room_ID ":" Customer.Days_of_Stay ":" Price_Per_Day ":" Total_Price + NEWLINE) to FILE of Room_Costs
+		PLACE CURSOR at START of FILE of Booking_File4
+	}
+	WHILE TRUE
+	{
+		DEFINE variable While_State1 = 0
+		DEFINE variable State = 0
+		PRINT("-----------------------------------------------------")
+		PRINT("Enter ID of room of which you want to see reciept of:-")
+		PRINT("Or Enter '3' to return to the main menu:- ")
+		READ entered data into Customer.Room_ID variable
+		CALL FUNCTION flushline with NO PARAMETERS
+		DEFINE switch structure with Customer.Room_ID variable
+		with case 3
+		IF case 3 = TRUE
+		{
+			Return_to_Main_Menu = 1
+			BREAK switch statement
+		}
+		IF no cases = TRUE
+		{
+			DO NOTHING
+			BREAK switch statement
+		}
+		IF Return_to_Main_Menu = 1
+		{
+			IF FILE of Room_Costs is OPEN
+			{
+				err = error code Value returned by CLOSING of FILE of Room_Costs
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Room_Costs)")
+				}
+				ENDIF
+			}
+			IF FILE of Booking_File4 is OPEN
+			{
+				err = error code Value RETURNED by CLOSING of FILE of Booking_File4
+				IF err = 0
+				{
+					DO NOTHING
+				}
+				ELSE
+				{
+					PRINT("Error closing file (Booking_File4)")
+				}
+				ENDIF
+			}
+			BREAK WHILE LOOP
+		}	
+		FOR Iteration < 10
+		{
+			IF Customer.Room_ID = OBJECT at POSITION = Iteration in Room_ID_Numbers ARRAY
+			{
+				Room_Found = 1
+				BREAK FOR LOOP
+			}
+			ELSE
+			{
+				INCREMENT Iteration by 1
+				Room_Found = 0
+			}
+			ENDIF
+		}
+		ENDFOR
+		IF Room_Found = 1
+		{
+			State = Value RETURNED by CALLING of FUNCTION RoomID_Duplicate_Checker with PARAMETERS(Customer.Room_ID)
+			IF State = 1
+			{
+				PRINT("----------------------------------------------------------------")
+				PRINT("This room has not been booked!, please type in another room's ID")
+				PRINT("----------------------------------------------------------------")
+			}
+			ELSE
+			{
+				PLACE CURSOR at START of FILE of Room_Costs
+				WHILE string READ from FILE of variable Room_Costs is NOT EQUAL to NULL
+				{
+					ASSIGN string to Room_Costs_string
+					DEFINE variable Count = 0
+					COPY string from Room_Costs_string ARRAY to Room_Costs_string2 ARRAY
+					DIVIDE Room_Costs_string on OCCURANCE of characters present in Delimeter ARRAY
+					ASSIGN resulting string to Token3
+					ASSIGN remaining string to Next_Token3
+					INCRMENT Count by 1
+					WHILE Token3 AND Count < 2
+					{
+						DIVIDE remaining string on OCCURANCE of characters present in Delimeter ARRAY
+						ASSIGN resulting string to Token3
+						ASSIGN remaining string to Next_Token3
+						INCREMENT Count by 1
+					}
+					ENDWHILE
+					Room_ID_2 = Value of Token3 CONVERTED to INTEGER FORMAT
+					IF Customer.Room_ID = Room_ID_2
+					{
+						DIVIDE Room_Costs_string2 on OCCURANCE of characters present in Delimeter
+						ASSIGN resulting string to Token4
+						ASSIGN remaining string Next_Token4
+						COPY string from Token4 into Customer.Name ARRAY
+						
+						DIVIDE Room_Costs_string2 on OCCURANCE of characters present in Delimeter
+						ASSIGN resulting string to Token4
+						ASSIGN remaining string Next_Token4
+						DIVIDE Room_Costs_string2 on OCCURANCE of characters present in Delimeter
+						ASSIGN resulting string to Token4
+						ASSIGN remaining string Next_Token4
+						Customer.Days_of_Stay = Value of Token4 CONVERTED to INTEGER FORMAT
+						
+						DIVIDE Room_Costs_string2 on OCCURANCE of characters present in Delimeter
+						ASSIGN resulting string to Token4
+						ASSIGN remaining string Next_Token4
+						Price_Per_Day = Value of Token4 CONVERTED to INTEGER FORMAT
+						
+						DIVIDE Room_Costs_string2 on OCCURANCE of characters present in Delimeter
+						ASSIGN resulting string to Token4
+						ASSIGN remaining string Next_Token4
+						Total_Price = Value of Token4 CONVERTED to INTEGER FORMAT
+						
+						PRINT("x------------------------------------x")
+						PRINT("| Name         :- ", Customer.Name)
+						PRINT("| Room ID      :- ", Customer.Room_ID)
+						PRINT("| Days of Stay :- ", Customer.Days_of_Stay)
+						PRINT("| Price per day:- RM", Price_Per_Day)
+						PRINT("| Total Costs  :- RM", Total_Price)
+						PRINT("x------------------------------------x\n")
+						BREAK WHILE LOOP
+					}	
+				}
+				ENDWHILE
+			}
+			ENDIF
+		}
+		ELSE
+		{
+			PRINT("-------------------------------------------------------------------")
+			PRINT("Room ID not found, please type in the correct ID given in the list.")
+			PRINT("-------------------------------------------------------------------")
+		}
+		ENDIF
+	
+		
+	}
+	ENDWHILE
+}
+
+DEFINE FUNCTION main with NO PARAMETERS
+{
+	DEFINE variable Answer = 0
+	WHILE TRUE
+	{
+		PRINT("-----------------------------------------")
+		PRINT("Welcome user, what would you like to do?")
+		PRINT("-----------------------------------------")
+		PRINT("1. Book a room")
+		PRINT("2. Search a room's booking details.")
+		PRINT("3. Update a customer's booking details.")
+		PRINT("4. View a customer's booking reciept.")
+		PRINT("5. Exit the program.")
+		PRINT("-----------------------------------------")
+		PRINT("Enter choice here:- ")
+		READ entered data into Answer variable
+		CALL FUNCTION flushline()
+		DEFINE switch sturcture with variable Answer
+		with case 1,2,3,4 and 5
+		IF case 1 = TRUE
+		{
+			CALL FUNCTION Booking_Function()
+			BREAK switch structure
+		}
+		IF case 2 = TRUE
+		{
+			CALL FUNCTION Search_Booking_Details()
+			BREAK switch structure
+		}
+		IF case 3 = TRUE
+		{
+			CALL FUNCTION Update_Booking_Details()
+			BREAK switch structure
+		}
+		IF case 4 = TRUE
+		{
+			CALL FUNCTION Cost_Function()
+			BREAK switch structure
+		}
+		IF case 5 = TRUE
+		{
+			PRINT("Program has been terminated\n");
+			EXIT PROGRAM with Value 0
+		}
+		IF no cases = TRUE
+		{
+			PRINT("-----------------------------------")
+			PRINT("Invalid choice, please enter again.")
+			PRINT("-----------------------------------")
+			BREAK switch structure
+		}
+	}
+	ENDWHILE
+	
+}
+
+
+
